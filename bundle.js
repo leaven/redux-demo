@@ -48,14 +48,36 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
+
 	var _redux = __webpack_require__(1);
 
-	var _reducer = __webpack_require__(11);
+	var _actions = __webpack_require__(11);
+
+	var types = _interopRequireWildcard(_actions);
+
+	var _reducer = __webpack_require__(12);
 
 	var _reducer2 = _interopRequireDefault(_reducer);
 
-	var store = (0, _redux.createStore)(todoApp);
-	console.log(111111);
+	var store = (0, _redux.createStore)(_reducer2['default']);
+
+	var buttons = document.querySelector(".button");
+	var light = document.querySelector("#light");
+
+	var subscribe = store.subscribe(function () {
+	  var state = store.getState();
+	  //改变light值
+	  light.className = state.light.color;
+	  //改变Button状态
+	  $(".high-light").removeClass("high-light");
+	  $(buttons.children[state.button.id]).addClass("high-light");
+	});
+	buttons.onclick = function (e) {
+	  var se = e.target;
+	  store.dispatch(types.turn_light(se.dataset.color));
+	  store.dispatch(types.high_light(se.dataset.id));
+	};
 
 /***/ },
 /* 1 */
@@ -740,6 +762,40 @@
 
 /***/ },
 /* 11 */
+/***/ function(module, exports) {
+
+	/**
+	 * action定义了一组操作，用type区分动作，额外参数作为state状态传递给reducer使用
+	 */
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.turn_light = turn_light;
+	exports.high_light = high_light;
+	var TURN_LIGHT = "TURN_LIGHT";
+	exports.TURN_LIGHT = TURN_LIGHT;
+	var HIGH_LIGHT = "HIGH_LIGHT";
+
+	exports.HIGH_LIGHT = HIGH_LIGHT;
+
+	function turn_light(color) {
+		return {
+			type: TURN_LIGHT,
+			color: color
+		};
+	}
+
+	function high_light(id) {
+		return {
+			type: HIGH_LIGHT,
+			id: id
+		};
+	}
+
+/***/ },
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -751,31 +807,34 @@
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
-
-	var _actions = __webpack_require__(12);
+	var _actions = __webpack_require__(11);
 
 	var types = _interopRequireWildcard(_actions);
 
-	var initState = [{
-		text: 'Hello World',
-		id: 0
-	}];
+	var initState = {
+		light: {
+			color: 'red'
+		},
+		button: {
+			id: 0
+		}
+	};
 
 	function todos(state, action) {
 		if (state === undefined) state = initState;
 
 		switch (action.type) {
-			case types.ADD_TODO:
-				return [{
-					id: state.reduce(function (first, second) {
-						return Math.max(first, second.id);
-					}, -1) + 1,
-					text: action.text
-				}].concat(_toConsumableArray(state));
-			case types.DELETE_TODO:
-				return state.filter(function (todo) {
-					return todo.id !== action.id;
+			case types.TURN_LIGHT:
+				return Object.assign({}, state, {
+					light: {
+						color: action.color
+					}
+				});
+			case types.HIGH_LIGHT:
+				return Object.assign({}, state, {
+					button: {
+						id: action.id
+					}
 				});
 			default:
 				return state;
@@ -783,40 +842,6 @@
 	}
 
 	module.exports = exports['default'];
-
-/***/ },
-/* 12 */
-/***/ function(module, exports) {
-
-	/**
-	 * action定义了一组操作，用type区分动作，额外参数作为state状态传递给reducer使用
-	 */
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	exports["default"] = add_todo;
-	exports["default"] = delete_todo;
-	var ADD_TODO = "ADD_TODO";
-	exports.ADD_TODO = ADD_TODO;
-	var DELETE_TODO = "DEL_TODO";
-
-	exports.DELETE_TODO = DELETE_TODO;
-
-	function add_todo(text) {
-		return {
-			type: ADD_TODO,
-			text: text
-		};
-	}
-
-	function delete_todo(id) {
-		return {
-			type: DELETE_TODO,
-			id: id
-		};
-	}
 
 /***/ }
 /******/ ]);

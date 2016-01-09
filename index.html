@@ -1,0 +1,56 @@
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>TODOMVC</title>
+	<style type="text/css">
+		#light{
+			margin:0 auto;
+			width: 50px;
+			height:25px;
+			line-height: 25px;
+			font-size: 16px;
+			background: red;
+		}
+		#light.red{
+			background: red;
+		}
+		#light.green{
+			background: green;
+		}
+		#light.yellow{
+			background: yellow;
+		}
+		.button{
+			margin-top:100px;
+			text-align: center;
+		}
+		button{
+			width:50px;
+			height:30px;
+		}
+		.turn-red.high-light{
+			background: red;
+			color:#FFF;
+		}
+		.turn-green.high-light{
+			background: green;
+			color:#FFF;
+		}
+		.turn-yellow.high-light{
+			background: yellow;
+			color:#FFF;		
+		}
+	</style>
+</head>
+<body>
+	<div id="light">
+	</div>
+	<div class="button">
+		<button class="turn-red" data-color="red" data-id="0">红灯</button>
+		<button class="turn-green" data-color="green" data-id="1">绿灯</button>
+		<button class="turn-yellow" data-color="yellow" data-id="2">黄灯</button>
+	</div>
+	<script src="http://apps.bdimg.com/libs/zepto/1.1.4/zepto.min.js"></script>
+	<script type="text/javascript" src="bundle.js"></script>
+</body>
+</html>
